@@ -111,8 +111,11 @@ public class sigh {
     @Consumes("application/x-www-form-urlencoded")
     public mdlPaciente wsGetPaciente(@FormParam("folio_simef")String folio_simef){
         mdlPaciente paciente=new mdlPaciente();
+        Connection connection=(Connection)ctrlConections.ConectionInformix();
         try {
-            ResultSet rs=mdlPaciente.getPaciente(folio_simef);
+            PreparedStatement ps=connection.prepareStatement("SELECT * FROM sigh_admon_simef WHERE folio=?");
+            ps.setString(1, folio_simef);
+            ResultSet rs=ps.executeQuery();
             if(rs.next()){
                 paciente.setStrAdmisionFecha(rs.getString("fec_adm"));
                 paciente.setStrAdmisionHora(rs.getString("hora_adm"));
@@ -124,10 +127,15 @@ public class sigh {
                 paciente.setStrAction("1");
             }else{
                 paciente.setStrAction("2");
+                
+            
             }
+            ps.close();
+            connection.close();
         } catch (Exception e) {
             System.err.println(e.getMessage());
             paciente.setStrAction("3");
+            
         }
         return paciente;
     }

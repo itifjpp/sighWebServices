@@ -90,13 +90,13 @@ public class mdlPaciente {
         this.strAction = strAction;
     }
     
-    /*PETICIONES Y CONEXIONES ALA BASE DE DATOS*/
-    static Connection conInformix=(Connection)ctrlConections.ConectionInformix();
-    //static Connection conMySQL=(Connection)ctrlConections.ConectionMySQL();
-    static PreparedStatement ps=null;
+    
     
     public static ResultSet getPaciente(String strFolio)throws SQLException{
-        ps=conInformix.prepareStatement("SELECT * FROM sigh_admon_simef WHERE folio=?");
+        /*PETICIONES Y CONEXIONES ALA BASE DE DATOS*/
+        Connection conInformix=(Connection)ctrlConections.ConectionInformix();
+        //static Connection conMySQL=(Connection)ctrlConections.ConectionMySQL();
+        PreparedStatement ps=conInformix.prepareStatement("SELECT * FROM sigh_admon_simef WHERE folio=?");
         ps.setString(1, strFolio);
         ResultSet rs=ps.executeQuery();
         return rs;
